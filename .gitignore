@@ -5,7 +5,11 @@ __pycache__/
 *.py[cod]
 
 # Django migrations
-/my_app/migrations/
+/likes/migrations/
+/store/migrations/
+/tags/migrations/
+
+
 
 # Database
 db.sqlite3
