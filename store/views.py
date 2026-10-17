@@ -4,23 +4,21 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
+from rest_framework.generics import ListCreateAPIView
 from . models import Product, Collection
 from . serializers import ProductSerializer, CollectionSerializer
 
 
-class ProductList(APIView):
+class ProductList(ListCreateAPIView):
 
-    def get(self, request):
-        query_set = Product.objects.select_related("collection").all()
-        serializer = ProductSerializer(query_set, many=True, context={'request': request})
-        return Response(serializer.data)
+    def get_queryset(self):
+        return Product.objects.select_related("collection").all()
 
-    def post(self, request):
-        serializer = ProductSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get_serializer_class(self):
+        return ProductSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class ProductDetail(APIView):
