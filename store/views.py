@@ -38,8 +38,9 @@ def product_detail(request, id):
                         status=status.HTTP_405_METHOD_NOT_ALLOWED)
         product.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
 
-@api_view("GET", "POST")
+@api_view(["GET", "POST"])
 def collection_list(request):
     if request.method == "GET":
         query_set = Collection.objects.annotate(products_count=Count('products')).all()
@@ -51,7 +52,7 @@ def collection_list(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-@api_view("GET", "PUT", "DELETE")
+@api_view(["GET", "PUT", "DELETE"])
 def collection_detail(request, pk):
     collection = get_object_or_404(
     Collection.objects.annotate(
