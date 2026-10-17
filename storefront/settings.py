@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'debug_toolbar',
     'playground',
     'store',
@@ -82,7 +83,7 @@ WSGI_APPLICATION = 'storefront.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'e-commerce',
+        'NAME': 'e-commerce-2',
         'USER': 'postgres',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1',
@@ -141,3 +142,7 @@ MAILERS = {
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+REST_FRAMEWORK = {
+    "COERCE_DECIMAL_TO_STRING": False, # In RestFramework to show decimals as decimal instead of string
+}
