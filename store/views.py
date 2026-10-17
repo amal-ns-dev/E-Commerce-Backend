@@ -11,11 +11,8 @@ from . serializers import ProductSerializer, CollectionSerializer
 
 class ProductList(ListCreateAPIView):
 
-    def get_queryset(self):
-        return Product.objects.select_related("collection").all()
-
-    def get_serializer_class(self):
-        return ProductSerializer
+    queryset = Product.objects.select_related("collection").all()
+    serializer_class = ProductSerializer
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -44,17 +41,10 @@ class ProductDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
-@api_view(["GET", "POST"])
-def collection_list(request):
-    if request.method == "GET":
-        query_set = Collection.objects.annotate(products_count=Count('products')).all()
-        serializer = CollectionSerializer(query_set, many=True)
-        return Response(serializer.data)
-    elif request.method == "POST":
-        serializer = CollectionSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+class CollectionList(ListCreateAPIView):
+    queryset = Collection.objects.annotate(products_count=Count('products')).all()
+    serializer_class = CollectionSerializer
+
 
 @api_view(["GET", "PUT", "DELETE"])
 def collection_detail(request, pk):
